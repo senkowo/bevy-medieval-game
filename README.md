@@ -29,7 +29,7 @@ hint: (e.g., 'git pull ...') before pushing again.
 hint: See the 'Note about fast-forwards' in 'git push --help' for details.
 ~~~
   - Then it means the remote contains code that does not exist locally. Therefore, someone must've modified the remote within the last time you performed a git pull, so your version is behind. 
-  - To fix this, you could git pull --force to get rid of your changes and get the latest version... though this probably isn't ideal unless the change you made was very small and could be rewritten easily.
+  - To fix this, you could ```git pull --force``` to get rid of your changes and get the latest version... though this probably isn't ideal unless the change you made was very small and could be rewritten easily.
   - So, you would probably want to do the following:
     - Try running git pull.
     - However, you will get this message:
