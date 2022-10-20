@@ -1,0 +1,16 @@
+[package]
+name = "medieval-game"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+#bevy = "0.8.1" <-- without Fast-compile ("dynamic")
+bevy = { version = "0.8.1", features = ["dynamic"] }
+
+
+# NOTE: if we wanted to publish the game as a standalone executable in the future, we would first need
+#		to compile it without " features = ["dynamic"] ", as that is basically an external dependency
+#		that increases compile times.
+
