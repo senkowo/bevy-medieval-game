@@ -8,14 +8,17 @@ hi
 - $ git clone \<url\>
   - Downloads the repo (run only in the beginning)
 - $ git pull
-  - Pulls all the changes that have been made on the remote repo to your local one, updating yours to date. 
+  - Pulls all the changes that have been made on the remote repo to your local one, updating yours to date. (do this before editing any files to keep it up to date)
 - $ git commit -a -m "\<your commit message\>"
   - "-a" adds all the files into a 'commit', which basically contains the changes you've made in your local repo. "-m" prompts you to enter a message for the commit. 
 - $ git add \<file\>
   - If you wanna add only a single file or directory to your future commit (doesn't create a commit). 
+- $ git commit -m "\<your commit message\>"
+  - How to make a commit after using "git add" to individually add the files you want to push to the remote main branch.
 - $ git push
   - Push the changes you've made in your commit to the remote repo.
-### I haven't learned how pull requests work, which might be a much much much more reliable method...
+## If there is a merge conflict when trying to git push:
+- \<insert link\>
 ## Special cases to git:
 - When you want to undo "git add" and "git commit", bringing you to where you started off:
   - $ git reset HEAD~1
