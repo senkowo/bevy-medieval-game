@@ -1,6 +1,6 @@
 # bevy-medieval-game
 ## important:
-- hi
+hi
 ## How to work with Cargo (Rust project manager)
 - $ cargo run
   - Runs the project (very useful)
@@ -17,19 +17,13 @@
   - How to make a commit after using "git add" to individually add the files you want to push to the remote main branch.
 - $ git push
   - Push the changes you've made in your commit to the remote repo.
+<<<<<<< HEAD
 ## If there is a merge conflict when trying to git push:
-- However, if there is a merge conflict when trying to git pull --rebase, then you'll have to manually resolve it.
-  - If you don't feel like going through that, then you could just git pull --force to overwrite the local changes (start over with your changes), or even git push --force, which will overwrite the remote (destructive, makes the remote a copy of your local, even if the remote is different).
-- $ git mergetool --tool=\<toolname\>
-  - I use "git mergetool --tool=nvimdiff" since I have nvim installed. 
-  - This will open up a big screen with many different tiles.
-  - The large bottom one shows the summary.
-  - The top left shows the local changes.
-  - The top middle shows the staging?
-  - The top right shows the state of the remote repo.
-  - Modify the files accordingly to where there will be no conflicts when merging.
-  - Once you are done, do git pull, and hope it works. 
-  - If it does, do a git push and you did it yay.
+- \<insert link\>
+=======
+### 
+test
+>>>>>>> 617638534ea50a7b3851c61c9cecd3546dc1c2fe
 ## Special cases to git:
 - When you want to undo "git add" and "git commit", bringing you to where you started off:
   - $ git reset HEAD~1
