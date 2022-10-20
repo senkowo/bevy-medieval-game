@@ -1,6 +1,6 @@
 # bevy-medieval-game
 ## important:
-hi
+- hi
 ## How to work with Cargo (Rust project manager)
 - $ cargo run
   - Runs the project (very useful)
