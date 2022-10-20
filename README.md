@@ -17,13 +17,8 @@ hi
   - How to make a commit after using "git add" to individually add the files you want to push to the remote main branch.
 - $ git push
   - Push the changes you've made in your commit to the remote repo.
-<<<<<<< HEAD
 ## If there is a merge conflict when trying to git push:
 - \<insert link\>
-=======
-### 
-test
->>>>>>> 617638534ea50a7b3851c61c9cecd3546dc1c2fe
 ## Special cases to git:
 - When you want to undo "git add" and "git commit", bringing you to where you started off:
   - $ git reset HEAD~1
