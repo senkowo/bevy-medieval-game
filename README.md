@@ -19,6 +19,16 @@
   - Push the changes you've made in your commit to the remote repo.
 ## If there is a merge conflict when trying to git push:
 - \<insert link\>
+- $ git mergetool --tool=\<toolname\>
+  - I use "git mergetool --tool=nvimdiff" since I have nvim installed. 
+  - This will open up a big screen with many different tiles.
+  - The large bottom one shows the summary.
+  - The top left shows the local changes.
+  - The top middle shows the staging?
+  - The top right shows the state of the remote repo.
+  - Modify the files accordingly to where there will be no conflicts when merging.
+  - Once you are done, do git pull, and hope it works. 
+  - If it does, do a git push and you did it yay.
 ## Special cases to git:
 - When you want to undo "git add" and "git commit", bringing you to where you started off:
   - $ git reset HEAD~1
