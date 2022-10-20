@@ -1,5 +1,5 @@
 # bevy-medieval-game
-## important
+## important:
 hi
 ## How to work on this code:
 - $ git clone \<url\>
