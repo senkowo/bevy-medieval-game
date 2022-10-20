@@ -7,7 +7,7 @@ hi
 - $ git pull
   - Pulls all the changes that have been made on the remote repo to your local one, updating yours to date. 
 - $ git commit -a -m "\<your commit message\>"
-  - "-a" adds all the files into a 'commit', which basically contains the changes you've made. "-m" prompts you to enter a message for the commit. 
+  - "-a" adds all the files into a 'commit', which basically contains the changes you've made in your local repo. "-m" prompts you to enter a message for the commit. 
 - $ git add \<file\>
   - If you wanna add only a single file or directory to your future commit (doesn't create a commit). 
 - $ git push
