@@ -14,3 +14,5 @@ bevy = { version = "0.8.1", features = ["dynamic"] }
 #		to compile it without " features = ["dynamic"] ", as that is basically an external dependency
 #		that increases compile times.
 
+[workspace]
+resolver = "2" # Not sure if this is important. Necessary for wgpu/Bevy.
