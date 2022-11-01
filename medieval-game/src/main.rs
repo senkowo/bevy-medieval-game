@@ -27,6 +27,7 @@ use bevy::prelude::*; // import basic stuff
 // region:
 const PLAYER_SPRITE: &str = "horse1.png";
 const PLAYER_SIZE: (f32, f32) = (144., 75.);
+const SPRITE_SCALE: f32 = 0.5;
 // endregion:
 
 //---------------------------------------------------------
@@ -84,10 +85,15 @@ fn setup_system(
   commands.spawn_bundle(SpriteBundle {
     // Within the struct "SpriteBundle", there is a field called "texture", which we'll set
     //  to the handle/pointer/reference to the sprite image, returned from asset_server.load().
-    texture: asset_server.load(PLAYER_SPRITE), // <- New component (property) of sprite (entity).
+    texture: asset_server.load(PLAYER_SPRITE), // <- Added a New component (property) of sprite (entity).
     // Another component (transforms sprite):
     transform: Transform {
-      translation: Vec3::new(0., bottom + PLAYER_SIZE.1 / 2. + 5., 10.),
+      translation: Vec3::new(0., (bottom + PLAYER_SIZE.1 / 2. * SPRITE_SCALE + 5.) , 10.),
+        // Vec3::new(x, y, z),
+        // Vec3::new(center, (bottom + Player-mid * Scaling? + padding), depth ),
+        //    Note: Player and enemies at layer 10.0 and projectiles at 1.0 (z-axis).
+      scale: Vec3::new(SPRITE_SCALE, SPRITE_SCALE, 1.),
+        // ^^^ Scales the sprite
       ..Default::default()
     },
     ..Default::default() // use default properties for the rest of the sprite
