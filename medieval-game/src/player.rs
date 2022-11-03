@@ -8,7 +8,8 @@ impl Plugin for PlayerPlugin {
         app
         .add_startup_system_to_stage(StartupStage::PostStartup, player_spawn_system)
         // call in every event loop
-        .add_system(player_movement_system);
+        .add_system(player_movement_system)
+        .add_system(player_keyboard_event_system);
     }
 }
 
@@ -29,7 +30,7 @@ fn player_spawn_system(
                 translation: Vec3::new(
                     0.,
                     (bottom + PLAYER_SIZE.1 / 2. * SPRITE_SCALE + 5.),
-                    10.
+                    10.,
                     //^ Default spawn location
                     //  Vec3::new(x, y, z),
                     //  Note: z-axis is the spite layer (layer here is set to 10. for now)
@@ -45,15 +46,23 @@ fn player_spawn_system(
     .insert(Velocity {x: 0., y: 0.});
 }
 
-// keyboard inputs -> Velocity
+// keyboard inputs -> Velocity -> Player movement
 fn player_keyboard_event_system(
     kb: Res<Input<KeyCode>>,
-    mut query: Query<&mut Velocity>, With<Player>>
-
+    mut query: Query<(&mut Velocity), With<Player>>,
 ) {
-
+    if let Ok(mut velocity) = query.get_single_mut() {
+        velocity.x = if kb.pressed(KeyCode::Left) {
+            -1.
+        } else if kb.pressed(KeyCode::Right) {
+            1.
+        } else {
+            0.
+        }
+    }
 }
 
+// movement of other sprites/entities
 fn player_movement_system(mut query: Query<(&Velocity, &mut Transform), With<Player>>) {
     for (velocity, mut transform) in query.iter_mut() {
         let translation = &mut transform.translation;
