@@ -3,6 +3,7 @@
 // Bevy Medieval Game thing -- Kai, Renzo, Caleb
 // uwu
 //
+//
 
 //# Special Settings: #//
 #![allow(unused)] // silence warnings given by the compiler saying that a variable is not in use. Delete this line later.
@@ -10,27 +11,55 @@
 
 //---------------------------------------------------------
 //### General Notes: ###
-// Bevy ECS types: >> System <|> Components <|> Entity <<
+// Bevy ECS types: System -> Components -> Entity
 //
 //---------------------------------------------------------
 
 
 //_ IMPORTS _//
 use bevy::prelude::*; // import basic stuff
+use crate::player::PlayerPlugin;
+use crate::components::*;
+
+//_ PLUGINS _//
+mod components; // <- bevy ECS components
+mod player;
 
 
 
 //---------------------------------------------------------
-//# CONSTANTS #//
+//#--- Asset Constants ---#
 
-//# Asset Constants #
-// region:
 const PLAYER_SPRITE: &str = "horse1.png";
 const PLAYER_SIZE: (f32, f32) = (144., 75.);
 const SPRITE_SCALE: f32 = 0.5;
-// endregion:
+
+
+//#--- Game Constants ---#
+
+const TIME_STEP: f32 = 1. / 60.; // <- 60 fps
+const BASE_SPEED: f32 = 500.;
+
+
+//#--- Resources (custom) ---#
+
+// access window size from different systems
+pub struct WinSize {
+    pub w: f32,
+    pub h: f32,
+}
+
+// access to asset_server without lots of imports
+pub struct GameTextures {
+    player: Handle<Image>
+}
+
+
+
+
 
 //---------------------------------------------------------
+
 
 
 //---------------------------------------------
@@ -38,22 +67,23 @@ const SPRITE_SCALE: f32 = 0.5;
 //
 
 fn main() {
-  App::new()
-  // Default background color
-  .insert_resource(ClearColor(Color::rgb(0.04, 0.04, 0.04)))
-  // Customizing window.
-  .insert_resource(WindowDescriptor {
-    title: "Rust Invaders!".to_string(),
-    width: 600.0,
-    height: 600.0,
-    ..Default::default()
-  })
-  // Add default plugins to make the program run correctly.
-  .add_plugins(DefaultPlugins)
-  // --- Add Startup systems below ---
-  .add_startup_system(setup_system)
-  // Run the program
-  .run();
+    App::new()
+        // Default background color
+        .insert_resource(ClearColor(Color::rgb(0.04, 0.04, 0.04)))
+        // Customizing window.
+        .insert_resource(WindowDescriptor {
+            title: "Rust Invaders!".to_string(),
+            width: 600.0,
+            height: 600.0,
+            ..Default::default()
+        })
+        // Add plugins
+        .add_plugins(DefaultPlugins)
+        .add_plugin(PlayerPlugin)
+        // Add setup_system as the 'startup' system
+        .add_startup_system(setup_system)
+        // Run the program
+        .run();
 }
 
 // This is the system (or function) that sets up the game.
@@ -65,37 +95,33 @@ fn main() {
 // The "windows" variable of type 'ResMut<Windows>' is a mutable resource (ResMut<_>) that
 //   will allow you to access and alter the window's components (properties).
 fn setup_system(
-  mut commands: Commands,
-  asset_server: Res<AssetServer>,
-  mut windows: ResMut<Windows>,
+    mut commands: Commands,
+    asset_server: Res<AssetServer>,
+    mut windows: ResMut<Windows>,
 ) {
-  commands.spawn_bundle(Camera2dBundle::default()); // spawn camera entity
-  //commands.spawn_bundle(OrthographicCameraBundle::new_2d());
+    commands.spawn_bundle(Camera2dBundle::default()); // spawn camera entity
+    //commands.spawn_bundle(OrthographicCameraBundle::new_2d());
 
-  // --- Capture window size
-  // Get window properties from the "windows" resource of type 'ResMut<Windows>'.
-  let window = windows.get_primary_mut().unwrap();
-  let (win_w, win_h) = (window.width(), window.height());
+    // --- Capture window size
+    // Get window properties from the "windows" resource of type 'ResMut<Windows>'.
+    let window = windows.get_primary_mut().unwrap();
+    let (win_w, win_h) = (window.width(), window.height());
 
-  // position window (for tutorial)
-  window.set_position(IVec2::new(2780, 4900));
+    // position window (for tutorial)
+    window.set_position(IVec2::new(2780, 4900));
 
-  // -- Main sprite entity -- using SpriteBundle (sprite builder)
-  let bottom = -win_h / 2.;
-  commands.spawn_bundle(SpriteBundle {
-    // Within the struct "SpriteBundle", there is a field called "texture", which we'll set
-    //  to the handle/pointer/reference to the sprite image, returned from asset_server.load().
-    texture: asset_server.load(PLAYER_SPRITE), // <- Added a New component (property) of sprite (entity).
-    // Another component (transforms sprite):
-    transform: Transform {
-      translation: Vec3::new(0., (bottom + PLAYER_SIZE.1 / 2. * SPRITE_SCALE + 5.) , 10.),
-        // Vec3::new(x, y, z),
-        // Vec3::new(center, (bottom + Player-mid * Scaling? + padding), depth ),
-        //    Note: Player and enemies at layer 10.0 and projectiles at 1.0 (z-axis).
-      scale: Vec3::new(SPRITE_SCALE, SPRITE_SCALE, 1.),
-        // ^^^ Scales the sprite
-      ..Default::default()
-    },
-    ..Default::default() // use default properties for the rest of the sprite
-  });
+    // add WinSize resource
+    let win_size = WinSize {w: win_w, h: win_h};
+    commands.insert_resource(win_size);
+
+    // add GameTextures resource
+    let game_textures = GameTextures {
+        player: asset_server.load(PLAYER_SPRITE)
+    };
+    commands.insert_resource(game_textures);
+
+    /*
+     * Note: Player spawning mechanism moved into a separate system.
+    */
 }
+
