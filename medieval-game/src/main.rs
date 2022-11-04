@@ -32,7 +32,10 @@ mod player;
 
 const PLAYER_SPRITE: &str = "horse1.png";
 const PLAYER_SIZE: (f32, f32) = (144., 75.);
-const SPRITE_SCALE: f32 = 0.5;
+const PLAYER_SCALE: f32 = 1.;
+const PLAYER_ARROW_SPRITE: &str = "arrow1.png";
+const ARROW_SIZE: (f32, f32) = (9., 54.);
+const ARROW_SCALE: f32 = 0.05;
 
 
 //#--- Game Constants ---#
@@ -49,9 +52,10 @@ pub struct WinSize {
     pub h: f32,
 }
 
-// access to asset_server without lots of imports
+// access to asset_server without lots of imports (simply access the struct)
 pub struct GameTextures {
-    player: Handle<Image>
+    player: Handle<Image>,
+    player_arrow: Handle<Image>,
 }
 
 
@@ -77,11 +81,13 @@ fn main() {
             height: 600.0,
             ..Default::default()
         })
-        // Add plugins
+        // Add plugins --
         .add_plugins(DefaultPlugins)
         .add_plugin(PlayerPlugin)
         // Add setup_system as the 'startup' system
         .add_startup_system(setup_system)
+        // Add movable_system to keep it continuously running
+        .add_system(movable_system)
         // Run the program
         .run();
 }
@@ -116,7 +122,8 @@ fn setup_system(
 
     // add GameTextures resource
     let game_textures = GameTextures {
-        player: asset_server.load(PLAYER_SPRITE)
+        player: asset_server.load(PLAYER_SPRITE),
+        player_arrow: asset_server.load(PLAYER_ARROW_SPRITE),
     };
     commands.insert_resource(game_textures);
 
@@ -125,3 +132,27 @@ fn setup_system(
     */
 }
 
+// movement of other sprites/entities
+fn movable_system(
+    mut commands: Commands,
+    win_size: Res<WinSize>,
+    mut query: Query<(Entity, &Velocity, &mut Transform, &Movable)>) {
+    for (entity, velocity, mut transform, movable) in query.iter_mut() {
+        let translation = &mut transform.translation;
+        translation.x += velocity.x * TIME_STEP * BASE_SPEED;
+        translation.y += velocity.y * TIME_STEP * BASE_SPEED;
+
+
+        if movable.auto_despawn {
+            // despawn when out of screen
+            const MARGIN: f32 = 200.;
+            if translation.y > win_size.h / 2. + MARGIN
+                || translation.y < -win_size.h / 2. - MARGIN
+                || translation.x > win_size.h / 2. + MARGIN
+                || translation.x < -win_size.h / 2. - MARGIN
+            {
+                commands.entity(entity).despawn();
+            }
+        }
+    }
+}

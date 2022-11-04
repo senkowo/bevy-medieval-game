@@ -8,6 +8,10 @@ pub struct Velocity {
     pub y: f32,
 }
 
+#[derive(Component)]
+pub struct Movable {
+    pub auto_despawn: bool,
+}
 
 // # Player Components --- #
 
