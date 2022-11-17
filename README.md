@@ -1,4 +1,5 @@
 # bevy-medieval-game
+(for school project) (instructions for teammates here)
 ## Okay so you wont really need to learn a lot of the stuff i wrote below if you're using the Github Desktop App (i wrote a lot of this stuff before realizing that there is a much easier to use desktop app).
 ## How to work with Cargo (Rust project manager)
 - $ cargo run
