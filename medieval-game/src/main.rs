@@ -18,11 +18,15 @@
 
 //_ IMPORTS _//
 use bevy::prelude::*; // import basic stuff
-use crate::player::PlayerPlugin;
+use crate::player::PlayerPlugin; // <- PlayerPlugin implements the Plugin trait and has a build
+                                 //    method function containing all of its systems, and they all
+                                 //    run below in App::new() <- add_plugin(PlayerPlugin).
+use crate::enemy::EnemyPlugin;
 use crate::components::*;
 
-//_ PLUGINS _//
-mod components; // <- bevy ECS components
+//_ "PLUGINS" _// (not sure what this does)
+mod components; // <- general bevy ECS components
+mod enemy;
 mod player;
 
 
@@ -36,6 +40,11 @@ const PLAYER_SCALE: f32 = 1.;
 const PLAYER_ARROW_SPRITE: &str = "arrow1.png";
 const ARROW_SIZE: (f32, f32) = (9., 54.);
 const ARROW_SCALE: f32 = 0.05;
+
+const ENEMY_SPRITE: &str = "horse1.png";
+const ENEMY_SIZE: (f32, f32) = (144., 75.);
+const ENEMY_PROJ_SPRITE: &str = "enemy_proj1";
+const ENEMY_PROJ_SIZE: (f32, f32) = (17., 55.);
 
 
 //#--- Game Constants ---#
@@ -53,9 +62,13 @@ pub struct WinSize {
 }
 
 // access to asset_server without lots of imports (simply access the struct)
+// This is a struct, so it doesn't store anything by default. It's more like a framework or Class.
+// Basically, I can now import this struct with "use crate::GameTextures" in other files.
 pub struct GameTextures {
     player: Handle<Image>,
     player_arrow: Handle<Image>,
+    enemy: Handle<Image>,
+    enemy_laser: Handle<Image>,
 }
 
 
@@ -84,6 +97,7 @@ fn main() {
         // Add plugins --
         .add_plugins(DefaultPlugins)
         .add_plugin(PlayerPlugin)
+        .add_plugin(EnemyPlugin)
         // Add setup_system as the 'startup' system
         .add_startup_system(setup_system)
         // Add movable_system to keep it continuously running
@@ -120,10 +134,17 @@ fn setup_system(
     let win_size = WinSize {w: win_w, h: win_h};
     commands.insert_resource(win_size);
 
-    // add GameTextures resource
+    // Creates an instance of GameTextures
+    // Its instance variables are bound to the sprite files (e.g. PLAYER_ARROW_SPRITE).
+    // So, to access the sprite files from another file, simply import this struct with
+    //   "use crate::GameTextures".
+    // Then, access the sprite file bound to the variable, within this struct instance
+    //   (game_textures): "game_textures.<instance-variable>".
     let game_textures = GameTextures {
         player: asset_server.load(PLAYER_SPRITE),
         player_arrow: asset_server.load(PLAYER_ARROW_SPRITE),
+        enemy: asset_server.load(ENEMY_SPRITE),
+        enemy_laser: asset_server.load(ENEMY_PROJ_SPRITE),
     };
     commands.insert_resource(game_textures);
 

@@ -91,13 +91,24 @@ fn player_keyboard_event_system(
     // then bind that to new variable 'velocity' and if Left or Right is pressed, set
     // velocity.x to appropriate number.
     if let Ok(mut velocity) = query.get_single_mut() {
-        velocity.x = if kb.pressed(KeyCode::Left) {
-            -1.
-        } else if kb.pressed(KeyCode::Right) {
-            1.
-        } else {
-            0.
-        }
+        velocity.x =
+            if kb.pressed(KeyCode::Left) {
+                -1.
+            } else if kb.pressed(KeyCode::Right) {
+                1.
+            } else {
+                0.
+            }
+    }
+    if let Ok(mut velocity) = query.get_single_mut() {
+        velocity.y =
+            if kb.pressed(KeyCode::Up) {
+                1.
+            } else if kb.pressed(KeyCode::Down) {
+                -1.
+            } else {
+                0.
+            }
     }
 }
 
